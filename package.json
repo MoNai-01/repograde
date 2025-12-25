@@ -1,0 +1,46 @@
+{
+  "name": "repograde",
+  "version": "1.0.0",
+  "description": "CLI tool to evaluate GitHub repository health",
+  "main": "src/index.js",
+  "bin": {
+    "repograde": "src/index.js"
+  },
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/index.js",
+    "lint": "eslint ."
+  },
+  "keywords": [
+    "github",
+    "cli",
+    "repository-health",
+    "security",
+    "code-quality",
+    "devtools"
+  ],
+  "author": "Monai",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MoNai-01/repograde.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MoNai-01/repograde/issues"
+  },
+  "homepage": "https://github.com/MoNai-01/repograde#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^14.0.2",
+    "execa": "^9.6.1",
+    "figlet": "^1.9.4",
+    "json2csv": "^6.0.0-alpha.2"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.2"
+  }
+}
+
