@@ -13,21 +13,22 @@ documentation, activity, CI, security, dependencies, and code quality.
 - Graceful error handling
 
 ## Installation
-
+````
 git clone https://github.com/MoNai-01/repograde.git
 cd repograde
 npm install
 npm link
-
+````
 ## Usage
-
+```
 repograde owner/repo
 repograde MoNai-01/repograde
 repograde MoNai-01/repograde --json
 repograde MoNai-01/repograde --badge
-
-## Example Output
-```` 
+```
+## Example 
+```
+repograde MoNai-01/repograde
     ____                   ______               __   
    / __ \___  ____  ____  / ____/________ _____/ /__ 
   / /_/ / _ \/ __ \/ __ \/ / __/ ___/ __ `/ __  / _ \
@@ -42,8 +43,8 @@ Repository Health Report
 ------------------------
 Repository: MoNai-01/repograde
 
-README:        0 / 15
-License:       0 / 10
+README:        15 / 15
+License:       10 / 10
 Issues:        15 / 15
 Commits:       5 / 25
 CI:            0 / 25
@@ -51,7 +52,7 @@ Secrets:       15 /15
 Dependencies:  25 /25
 Quality:       25 /25
 ------------------------
-TOTAL SCORE:   55 / 100
-GRADE:         D
+TOTAL SCORE:   75 / 100
+GRADE:         B
 
-````
+```
