@@ -27,7 +27,7 @@ repograde MoNai-01/repograde --json
 repograde MoNai-01/repograde --badge
 
 ## Example Output
-
+```` 
     ____                   ______               __   
    / __ \___  ____  ____  / ____/________ _____/ /__ 
   / /_/ / _ \/ __ \/ __ \/ / __/ ___/ __ `/ __  / _ \
@@ -37,14 +37,6 @@ repograde MoNai-01/repograde --badge
 CLI Tool to Check GitHub Repository Health
 
 Analyzing MoNai-01/repograde...
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0   0     0   0     0     0     0  --:--:-- --:--:-- --:--:--     0
-100  6050k   0  6050k   0     0 437870     0  --:--:--  0:00:14 --:--:-- 495313
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0   0     0   0     0     0     0  --:--:-- --:--:-- --:--:--     0
-100  6050k   0  6050k   0     0 458905     0  --:--:--  0:00:13 --:--:-- 521710
 
 Repository Health Report
 ------------------------
@@ -62,3 +54,4 @@ Quality:       25 /25
 TOTAL SCORE:   55 / 100
 GRADE:         D
 
+````
