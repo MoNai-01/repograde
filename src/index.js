@@ -41,7 +41,8 @@ CLI Features & Usability:
   .exitOverride((err) => {
     if (err.code === "commander.missingArgument") {
       console.error("No repositories specified. Please provide one or more in owner/repo format.\n");
-      program.help({ error: true });
+      program.outputHelp();
+      process.exit(0);
     }
   })
   .parse(process.argv);
