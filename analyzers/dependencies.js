@@ -1,35 +1,59 @@
 const github = require("../utils/github");
 const execa = require("execa");
+const fs = require("fs");
+const path = require("path");
+const os = require("os");
+const { downloadFile, extractZip } = require("../utils/download");
 
-module.exports = async (owner, repo) => {
+function getTempDir(repoName) {
+  return path.join(os.tmpdir(), repoName.replace("/", "_"));
+}
+
+function cleanupTempDir(dir) {
+  if (fs.existsSync(dir)) fs.rmSync(dir, { recursive: true, force: true });
+}
+
+function ensureTempDir(dir) {
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+}
+
+module.exports = async (owner, repo, githubToken = null) => {
+  const tmpDir = getTempDir(`${owner}_${repo}`);
+  
   try {
-    // Download repo zip and extract locally (simplified example)
-    const zipUrl = `https://github.com/${owner}/${repo}/archive/refs/heads/main.zip`;
-    const tmpDir = `/tmp/${repo.replace("/", "_")}`;
+    const repoInfo = await github.get(`/repos/${owner}/${repo}`, {}, githubToken);
+    const defaultBranch = repoInfo.data.default_branch || "main";
+    const zipUrl = `https://github.com/${owner}/${repo}/archive/refs/heads/${defaultBranch}.zip`;
 
-    const fs = require("fs");
-    const path = require("path");
-    const { execSync } = require("child_process");
+    cleanupTempDir(tmpDir);
+    ensureTempDir(tmpDir);
 
-    fs.rmSync(tmpDir, { recursive: true, force: true });
-    fs.mkdirSync(tmpDir, { recursive: true });
+    const zipPath = path.join(tmpDir, "repo.zip");
+    await downloadFile(zipUrl, zipPath);
+    await extractZip(zipPath, tmpDir);
 
-    execSync(`curl -L ${zipUrl} -o ${tmpDir}/repo.zip`);
-    execSync(`unzip -o ${tmpDir}/repo.zip -d ${tmpDir}`);
+    const extractedDir = fs.readdirSync(tmpDir).find(f => fs.statSync(path.join(tmpDir, f)).isDirectory());
+    if (!extractedDir) return 0;
 
-    const pkgJson = path.join(tmpDir, fs.readdirSync(tmpDir)[0], "package.json");
-    if (!fs.existsSync(pkgJson)) return 25; // no JS dependencies, full points
+    const pkgJson = path.join(tmpDir, extractedDir, "package.json");
+    if (!fs.existsSync(pkgJson)) return 25;
 
-    // Run npm audit
     try {
-      const { stdout } = await execa("npm", ["audit", "--json"], { cwd: path.dirname(pkgJson) });
+      const { stdout } = await execa("npm", ["audit", "--json"], { cwd: path.dirname(pkgJson), reject: false, timeout: 30000 });
       const audit = JSON.parse(stdout);
-      const critical = audit.metadata.vulnerabilities.critical || 0;
-      return critical > 0 ? 10 : 25;
+      const vulns = audit.metadata?.vulnerabilities || {};
+      let score = 10;
+      if ((vulns.critical || 0) > 0) score -= 5;
+      else if ((vulns.high || 0) >= 5) score -= 3;
+      else if ((vulns.high || 0) >= 2) score -= 2;
+      return Math.max(Math.round(score), 0);
     } catch {
-      return 10; // error in audit, assume vulnerabilities
+      return 5;
     }
   } catch {
-    return 25; // if repo not JS, full points
+    return 0;
+  } finally {
+    cleanupTempDir(tmpDir);
   }
 };
+ 
