@@ -25,6 +25,11 @@ repograde MoNai-01/repograde
 repograde MoNai-01/repograde --json
 repograde MoNai-01/repograde --badge
 ```
+## Help menu
+```
+repograde
+repograde --help
+```
 ## Example 
 ```
 repograde MoNai-01/repograde
